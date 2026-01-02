@@ -1,0 +1,43 @@
+# Build artifacts
+.aws-sam/
+infra/cdk.out/
+infra/node_modules/
+*.pyc
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Environment variables
+.env
+.venv
+env/
+venv/
+ENV/
+
+# IDE
+.cursor/
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+output/logs/
+output/screenshots/
+
+# Dependencies
+node_modules/
+package-lock.json
+
+# Temporary files
+*.tmp
+*.temp
+

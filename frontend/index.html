@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Website Analysis Agent</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Website Analysis Agent</h1>
+            <p class="subtitle">Automated Financial Crime Compliance Analysis</p>
+        </header>
+
+        <main>
+            <!-- Analysis Form -->
+            <section class="card" id="analysis-form-section">
+                <h2>Analyze Website</h2>
+                <form id="analysis-form">
+                    <div class="form-group">
+                        <label for="url-input">Website URL:</label>
+                        <input 
+                            type="url" 
+                            id="url-input" 
+                            name="url" 
+                            placeholder="https://www.example.com"
+                            required
+                        >
+                    </div>
+                    <button type="submit" id="submit-btn" class="btn btn-primary">
+                        Analyze Website
+                    </button>
+                </form>
+            </section>
+
+                <!-- Status Display -->
+                <section class="card" id="status-section" style="display: none;">
+                    <h2>Analysis Status</h2>
+                    <div id="status-content">
+                        <div class="progress-bar">
+                            <div id="progress-fill" class="progress-fill"></div>
+                        </div>
+                        <p id="status-message" class="status-message"></p>
+                        <p id="status-details" class="status-details"></p>
+                    </div>
+                    <!-- Console Display -->
+                    <div id="logs-section" style="margin-top: 20px; display: none;">
+                        <h3 style="margin-bottom: 10px;">Console</h3>
+                        <div id="logs-container" class="logs-container"></div>
+                    </div>
+                </section>
+
+            <!-- Results Display -->
+            <section class="card" id="results-section" style="display: none;">
+                <h2>Analysis Results</h2>
+                <div id="results-content">
+                    <!-- Business Summary -->
+                    <div class="result-card">
+                        <h3>Business Summary</h3>
+                        <div id="business-summary"></div>
+                    </div>
+
+                    <!-- Flags -->
+                    <div class="result-card">
+                        <h3>Compliance Flags</h3>
+                        <div id="flags-display"></div>
+                    </div>
+
+                    <!-- NAICS Codes -->
+                    <div class="result-card">
+                        <h3>NAICS Classification</h3>
+                        <div id="naics-display"></div>
+                    </div>
+
+                    <!-- Address -->
+                    <div class="result-card">
+                        <h3>Address Validation</h3>
+                        <div id="address-display"></div>
+                    </div>
+
+                    <!-- Company Registration -->
+                    <div class="result-card">
+                        <h3>Company Registration</h3>
+                        <div id="company-registration-display"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Error Display -->
+            <section class="card error-card" id="error-section" style="display: none;">
+                <h2>Error</h2>
+                <p id="error-message"></p>
+            </section>
+
+            <!-- History -->
+            <section class="card">
+                <h2>Analysis History</h2>
+                <button id="refresh-history-btn" class="btn btn-secondary">Refresh</button>
+                <div id="history-content">
+                    <table id="history-table">
+                        <thead>
+                            <tr>
+                                <th>URL</th>
+                                <th>Status</th>
+                                <th>Created</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="history-tbody">
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
+
+
+
