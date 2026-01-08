@@ -35,10 +35,22 @@ def extract_address(content: Dict[str, str], job_id: str = None) -> Optional[str
     # Combine contact and about pages (prioritize contact page)
     text = f"{content.get('contact', '')} {content.get('about', '')} {content.get('homepage', '')}"
     
-    # Try regex patterns for common address formats
+    # Debug: Log if we have content
+    if job_id and not text.strip():
+        job_manager.add_log(job_id, "Warning: No content available for address extraction")
+    elif job_id:
+        job_manager.add_log(job_id, f"Analyzing {len(text)} characters of content for address extraction")
+    
+    # Try regex patterns for common address formats (US, UK, international)
     address_patterns = [
+        # US format: 123 Main St, City, ST 12345
         r'\d+[,\s]+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Way|Boulevard|Blvd)[,\s]+[A-Za-z\s]+(?:,\s*)?[A-Za-z\s]+(?:,\s*)?[A-Z]{2}\s*\d{5,10}',
-        r'\d+[,\s]+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave)[,\s]+[A-Za-z\s]+(?:,\s*)?[A-Za-z\s]+(?:,\s*)?[A-Z]{2}',
+        # UK format: 123 High Street, City, Postcode
+        r'\d+[,\s]+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Way|Boulevard|Blvd|Close|Cl|Crescent|Cres|Place|Pl)[,\s]+[A-Za-z\s]+(?:,\s*)?[A-Za-z\s]+(?:,\s*)?[A-Z]{1,2}\d{1,2}\s?\d[A-Z]{2}',
+        # Generic: Number + Street + City + Postal
+        r'\d+[,\s]+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Way|Boulevard|Blvd)[,\s]+[A-Za-z\s]+(?:,\s*)?[A-Za-z\s]+(?:,\s*)?[A-Z]{1,2}?\d{1,2}\s?\d[A-Z]{2}',
+        # Generic: Number + Street + City
+        r'\d+[,\s]+[A-Za-z\s]+(?:Street|St|Road|Rd|Avenue|Ave|Lane|Ln|Drive|Dr|Way|Boulevard|Blvd)[,\s]+[A-Za-z\s]+(?:,\s*)?[A-Za-z\s]+',
     ]
     
     for pattern in address_patterns:
@@ -88,14 +100,21 @@ def extract_address(content: Dict[str, str], job_id: str = None) -> Optional[str
         
         # Validate the extracted address
         if address and address.lower() != 'none' and len(address) > 10:
-            # Check if it looks like an address
+            # Check if it looks like an address (be more lenient with LLM results)
             if _looks_like_address(address):
                 if job_id:
                     job_manager.add_log(job_id, f"Address found via LLM: {address[:50]}...")
                 return address
             else:
-                if job_id:
-                    job_manager.add_log(job_id, f"LLM extracted text doesn't look like an address: {address[:50]}...")
+                # Even if validation fails, if LLM returned something substantial, trust it
+                # (LLM is usually better at context than regex)
+                if len(address.split()) >= 3 and any(word in address.lower() for word in ['street', 'road', 'avenue', 'lane', 'drive', 'way', 'st', 'rd', 'ave']):
+                    if job_id:
+                        job_manager.add_log(job_id, f"Address found via LLM (lenient validation): {address[:50]}...")
+                    return address
+                else:
+                    if job_id:
+                        job_manager.add_log(job_id, f"LLM extracted text doesn't look like an address: {address[:50]}...")
     except Exception as e:
         if job_id:
             job_manager.add_log(job_id, f"LLM address extraction failed: {e}")
