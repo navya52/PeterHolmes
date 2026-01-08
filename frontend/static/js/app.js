@@ -251,9 +251,12 @@ function displayResults(result) {
         addressDiv.innerHTML = `
             <p><strong>Address:</strong> ${result.address.address}</p>
             <p><strong>Validation Status:</strong> 
-                <span style="color: ${validation.valid ? '#4caf50' : '#f44336'}; font-weight: bold;">
-                    ${validation.valid ? '✓ Verified' : '✗ Not Verified'}
-                </span>
+                ${validation.valid === true ? 
+                    '<span style="color: #4caf50; font-weight: bold;">✓ Verified</span>' :
+                    validation.valid === false ?
+                    '<span style="color: #f44336; font-weight: bold;">✗ Invalid</span>' :
+                    '<span style="color: #ff9800; font-weight: bold;">⚠ Not Validated</span>'
+                }
             </p>
             ${commercialBadge}
             ${plausibilityNote ? `<p style="margin-top: 10px; padding: 8px; background: #f5f5f5; border-radius: 4px;"><strong>Analysis:</strong> ${plausibilityNote}</p>` : ''}

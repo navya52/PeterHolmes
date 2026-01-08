@@ -48,14 +48,17 @@ def validate_address(address: str) -> Dict[str, any]:
     """
     api_key = os.getenv("GOOGLE_STREET_VIEW_API_KEY")
     
+    # If API key not configured, still run plausibility check but mark validation as unknown
     if not api_key or api_key == 'placeholder':
+        # Still run plausibility check even without Street View API
+        plausibility = check_address_plausibility(address)
         return {
-            'valid': False,
+            'valid': None,  # Unknown, not invalid
             'image_path': None,
-            'notes': 'Google Street View API key not configured',
-            'is_commercial': None,
-            'plausibility_note': None,
-            'address_types': None
+            'notes': 'Address found. Street View validation unavailable (API key not configured). Plausibility check completed.',
+            'is_commercial': plausibility.get('is_commercial'),
+            'plausibility_note': plausibility.get('plausibility_note'),
+            'address_types': plausibility.get('address_types')
         }
     
     # Quick sanity check first - reject obvious non-addresses

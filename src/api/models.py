@@ -61,7 +61,7 @@ class NAICSResponse(BaseModel):
 
 class AddressValidation(BaseModel):
     """Address validation response."""
-    valid: bool
+    valid: Optional[bool] = None  # True = valid, False = invalid, None = unknown/not checked
     image_path: Optional[str] = None
     notes: str
     is_commercial: Optional[bool] = None
