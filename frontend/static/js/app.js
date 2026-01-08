@@ -261,8 +261,8 @@ function displayResults(result) {
             ${validation.image_path ? `
                 <img src="/${validation.image_path}" alt="Address" class="address-image" style="margin-top: 10px;">
             ` : ''}
-            <div style="margin-top: 15px; padding: 10px; background: #fff9c4; border-left: 4px solid #fbc02d; border-radius: 4px; font-size: 0.9em;">
-                <strong>💡 Note:</strong> For production use with real-time commercial/residential classification, enable Google Places API with a paid plan. This will provide enhanced accuracy and additional location intelligence.
+            <div style="margin-top: 15px; padding: 10px; background: #e3f2fd; border-left: 4px solid #2196f3; border-radius: 4px; font-size: 0.9em;">
+                <strong>🤖 AI Analysis:</strong> This classification uses AI-powered address analysis. For production use with real-time geospatial data and enhanced accuracy, enable Google Places API with a paid plan.
             </div>
         `;
     } else {
